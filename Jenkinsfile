@@ -3,23 +3,17 @@ pipeline {
     tools {
         jdk 'openjdk-11'
     }
+    environment {
+        GIT_SHA = sh(returnStdout: true, script: 'git rev-parse --short HEAD')
+    }
     triggers {
         githubPush()
     }
 
     stages {
         stage('Git Sha') {
-            environment {
-                GIT_SHA = sh(returnStdout: true, script: 'git rev-parse --short HEAD')
-                TEST = 'this is a test'
-            }
             steps {
-                echo 'Git - ${env.GIT_SHA}'
-                echo 'Test - ${env.TEST}'
-                echo "Git 1 - ${GIT_SHA}"
-                echo "Test 1 - ${TEST}"
-                sh 'echo "Git 2 - ${GIT_SHA}"'
-                sh 'echo "Test 2 - ${TEST}"'
+                echo "Git - ${GIT_SHA}"
             }
         }
 //         stage('Build') {
