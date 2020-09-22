@@ -11,9 +11,11 @@ pipeline {
         stage('Git Sha') {
             environment {
                 GIT_SHA = sh(returnStdout: true, script: 'git rev-parse --short HEAD')
+                TEST = 'this is a test'
             }
             steps {
                 echo 'Git - ${GIT_SHA}'
+                echo 'Test - ${TEST}'
             }
         }
 //         stage('Build') {
