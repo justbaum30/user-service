@@ -14,8 +14,12 @@ pipeline {
                 TEST = 'this is a test'
             }
             steps {
-                echo 'Git - ${GIT_SHA}'
-                echo 'Test - ${TEST}'
+                echo 'Git - ${env.GIT_SHA}'
+                echo 'Test - ${env.TEST}'
+                echo "Git 1 - ${GIT_SHA}"
+                echo "Test 1 - ${TEST}"
+                sh 'echo "Git 2 - ${GIT_SHA}"'
+                sh 'echo "Test 2 - ${TEST}"'
             }
         }
 //         stage('Build') {
