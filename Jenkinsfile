@@ -4,7 +4,8 @@ pipeline {
         jdk 'openjdk-11'
     }
     environment {
-        GIT_SHA = sh(returnStdout: true, script: 'git rev-parse --short HEAD')
+        ECR_IMAGE_NAME = '719042170775.dkr.ecr.us-west-2.amazonaws.com/jbaumgartner/user-service'
+        IMAGE_TAG = sh(returnStdout: true, script: 'git rev-parse --short HEAD')
     }
     triggers {
         githubPush()
@@ -12,8 +13,11 @@ pipeline {
 
     stages {
         stage('Git Sha') {
+            environment {
+                ECR_URL = "https://${ECR_IMAGE_NAME}"
+            }
             steps {
-                echo "Git - ${GIT_SHA}"
+                echo "Image URL = ${ECR_URL}"
             }
         }
 //         stage('Build') {
@@ -41,8 +45,7 @@ pipeline {
 //                 branch 'master'
 //             }
 //             environment {
-//                 ECR_URL = 'https://719042170775.dkr.ecr.us-west-2.amazonaws.com/jbaumgartner/user-service'
-//                 ECR_IMAGE_NAME = '719042170775.dkr.ecr.us-west-2.amazonaws.com/jbaumgartner/user-service'
+//                 ECR_URL = "https://${ECR_IMAGE_NAME}"
 //                 LOCAL_IMAGE_NAME = 'jbaumgartner/user-service'
 //             }
 //             steps {
@@ -50,8 +53,8 @@ pipeline {
 //                     sh './gradlew jibDockerBuild --image=${LOCAL_IMAGE_NAME}'
 //                     sh 'docker tag ${LOCAL_IMAGE_NAME}:latest ${ECR_IMAGE_NAME}:latest'
 //                     sh 'docker push ${ECR_IMAGE_NAME}:latest'
-//                     sh 'docker tag ${LOCAL_IMAGE_NAME}:latest ${ECR_IMAGE_NAME}:${BUILD_NUMBER}'
-//                     sh 'docker push ${ECR_IMAGE_NAME}:${BUILD_NUMBER}'
+//                     sh 'docker tag ${LOCAL_IMAGE_NAME}:latest ${ECR_IMAGE_NAME}:${IMAGE_TAG}'
+//                     sh 'docker push ${ECR_IMAGE_NAME}:${IMAGE_TAG}'
 //                 }
 //             }
 //         }
